@@ -1,6 +1,6 @@
 [project]
 name = "pytractive"
-version = "0.1.0"
+version = "1.0.0"
 description = "Unofficial Asynchronous Python client for the Tractive REST API."
 readme = "README.md"
 authors = [
