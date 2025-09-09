@@ -9,7 +9,7 @@ from typing import Any
 
 from aiohttp.client_exceptions import ClientResponseError
 
-from aiotractive.api import API
+from pytractive.api import API
 from .exceptions import DisconnectedError, TractiveError, UnauthorizedError
 
 
@@ -71,9 +71,13 @@ class Channel:
 
             except ClientResponseError as err:
                 if err.status in {401, 403}:
-                    await self._queue.put({"type": "error", "error": UnauthorizedError(err)})
+                    await self._queue.put(
+                        {"type": "error", "error": UnauthorizedError(err)}
+                    )
                 else:
-                    await self._queue.put({"type": "error", "error": TractiveError(err)})
+                    await self._queue.put(
+                        {"type": "error", "error": TractiveError(err)}
+                    )
                 return
 
             except asyncio.CancelledError as cancel:
@@ -88,7 +92,10 @@ class Channel:
         """Watch-dog: cancel listener if keep-alive times out."""
         try:
             while True:
-                if self._last_keep_alive is not None and time.time() - self._last_keep_alive > self.KEEP_ALIVE_TIMEOUT:
+                if (
+                    self._last_keep_alive is not None
+                    and time.time() - self._last_keep_alive > self.KEEP_ALIVE_TIMEOUT
+                ):
                     if self._listen_task and not self._listen_task.done():
                         _ = self._listen_task.cancel()
                     return

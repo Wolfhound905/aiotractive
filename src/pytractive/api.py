@@ -29,7 +29,9 @@ class API:
         loop: asyncio.AbstractEventLoop | None = None,
         session: ClientSession | None = None,
         retry_count: int = 3,
-        retry_delay: int | float | Callable[[int], int | float] = (lambda attempt: 3**attempt + random.uniform(0, 3)),
+        retry_delay: int | float | Callable[[int], int | float] = (
+            lambda attempt: 3**attempt + random.uniform(0, 3)
+        ),
     ) -> None:
         self._login: str = login
         self._password: str = password
@@ -82,7 +84,6 @@ class API:
             api_version="3",
         )
 
-
     async def raw_request(
         self,
         uri: str,
@@ -95,7 +96,11 @@ class API:
     ) -> Any:
         url = f"{self.API_URL}{api_version}/{uri}"
 
-        headers = override_headers if override_headers is not None else await self.auth_headers()
+        headers = (
+            override_headers
+            if override_headers is not None
+            else await self.auth_headers()
+        )
 
         async with self.session.request(
             method,
@@ -112,10 +117,18 @@ class API:
 
             if response.status == 429:
                 if attempt <= self._retry_count:
-                    delay = self._retry_delay(attempt) if callable(self._retry_delay) else float(self._retry_delay)
-                    _LOGGER.info("Request limit exceeded, retrying in %.1f seconds", delay)
+                    delay = (
+                        self._retry_delay(attempt)
+                        if callable(self._retry_delay)
+                        else float(self._retry_delay)
+                    )
+                    _LOGGER.info(
+                        "Request limit exceeded, retrying in %.1f seconds", delay
+                    )
                     await asyncio.sleep(delay)
-                    return await self.raw_request(uri, params, data, method, attempt=attempt + 1)
+                    return await self.raw_request(
+                        uri, params, data, method, attempt=attempt + 1
+                    )
                 raise TractiveError("Request limit exceeded")
 
             if response.headers.get("Content-Type", "").startswith("application/json"):

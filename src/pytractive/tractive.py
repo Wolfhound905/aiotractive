@@ -3,7 +3,7 @@
 from collections.abc import Iterable
 import logging
 
-from aiotractive.exceptions import TractiveError
+from pytractive.exceptions import TractiveError
 from .channel import Channel
 import asyncio
 import random
@@ -13,7 +13,7 @@ from aiohttp import ClientSession
 from .trackable_object import TrackableObject
 from .tracker import Tracker
 
-from aiotractive.api import API
+from pytractive.api import API
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -29,7 +29,9 @@ class Tractive:
         loop: asyncio.AbstractEventLoop | None = None,
         session: ClientSession | None = None,
         retry_count: int = 3,
-        retry_delay: int | float | Callable[[int], int | float] = (lambda attempt: 3**attempt + random.uniform(0, 3)),
+        retry_delay: int | float | Callable[[int], int | float] = (
+            lambda attempt: 3**attempt + random.uniform(0, 3)
+        ),
     ) -> None:
         """Initialize the client."""
         self._api: "API" = API(
@@ -72,7 +74,9 @@ class Tractive:
         return Tracker(self._api, {"_id": tracker_id, "_type": "tracker"})
 
     async def trackable_objects(self):
-        objects = await self._api.request(f"user/{await self._api.user_id()}/trackable_objects")
+        objects = await self._api.request(
+            f"user/{await self._api.user_id()}/trackable_objects"
+        )
         return [TrackableObject(self._api, t) for t in objects]
 
     async def events(self):

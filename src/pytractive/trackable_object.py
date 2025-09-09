@@ -15,7 +15,9 @@ class TrackableObject(DataObject):
             "local_month": date.month,
             "local_year": date.year,
         }
-        return await self._api.request(f"pet/{self._id}/activity/day_overview", params=params)
+        return await self._api.request(
+            f"pet/{self._id}/activity/day_overview", params=params
+        )
 
     async def week_overview(self, date: datetime) -> Any:
         params = {
@@ -23,4 +25,6 @@ class TrackableObject(DataObject):
             "local_month": date.month,
             "local_year": date.year,
         }
-        return await self._api.request(f"pet/{self._id}/activity/week_overview", params=params)
+        return await self._api.request(
+            f"pet/{self._id}/activity/week_overview", params=params
+        )

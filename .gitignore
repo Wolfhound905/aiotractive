@@ -7,7 +7,8 @@ docs/build
 .vscode/
 requirements.txt
 event_examples/
-
+test.py
+.ruff_cache
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -34,6 +35,7 @@ var/
 .installed.cfg
 *.egg
 venv/
+.venv/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

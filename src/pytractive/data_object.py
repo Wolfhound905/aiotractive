@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Any, override
 
 if TYPE_CHECKING:
-    from aiotractive.api import API
+    from pytractive.api import API
 
 
 class DataObject:
