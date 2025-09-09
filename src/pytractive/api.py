@@ -43,6 +43,8 @@ class API:
             loop = loop or asyncio.get_event_loop()
             self.session: ClientSession = ClientSession(raise_for_status=True)
             self._close_session = True
+        else:
+            self.session = session
 
         self._user_credentials: UserCredentials = UserCredentials()
 
